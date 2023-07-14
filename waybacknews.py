@@ -10,6 +10,7 @@ import requests
 from colorama import Fore, Back, Style
 from time import sleep
 from bs4 import BeautifulSoup
+import asyncio
 
 
 class Waybacknews:
@@ -61,10 +62,13 @@ class Waybacknews:
         print(("{}").format(Fore.YELLOW + 'Would you like to have older versions of this site ? yes or no',))
         query = input(Fore.CYAN + '==> ')
 
-        if query == 'yes' or query == 'y' query == '':
+        if query == 'yes' or query == 'y' or query == '':
             Waybacknews.showOlder(url)
         else:
-            exit(0)
+            print(("{}").format(Fore.YELLOW + 'What Content are you looking for in one of the older versions of this site?',))
+            content = input(Fore.CYAN + '==> ')
+            findcontent = str(content)
+            asyncio.run(Waybacknews.findContent(self, findcontent))
 
     def showOlder(site):
         """display another older version in this site"""
@@ -95,7 +99,7 @@ class Waybacknews:
 
         #print(precision)
         sleep(3)
-        #print(("{}").format(Fore.YELLOW + 'Quel Contenu recherchez vous dans ces versions ?',))
+        #print(("{}").format(Fore.YELLOW + 'Quel Contenu recherchez vous dans ces ver ?',))
         #content = input(Fore.CYAN + '==> ')
         print(("{}").format(Fore.YELLOW + 'A la quelle des dates ?',))
         chxdate = int(input(Fore.CYAN + '==> '))
@@ -110,6 +114,13 @@ class Waybacknews:
         for paragraph in range(0, paragraph_length):
             print(contentpage[paragraph])
             sleep(1)
+
+    async def findContent(self, content):
+        """function to find content"""
+        print(self.site)
+        cdxSite = "http://web.archive.org/cdx/search/cdx?url=" + self.site + "&output=json"
+        getAll = requests.get(cdxSite)
+        print(getAll.json())
 
 if __name__ == '__main__':
     Waybacknews()
