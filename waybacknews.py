@@ -20,44 +20,48 @@ class Waybacknews:
         Args:
             load (int): counter for loading
         """
+        print(Fore.WHITE + 'Enter the target domain (like this' + Fore.RED +' "dirkk.tech"' + Fore.WHITE + ') : ')
+        domain = input(Fore.CYAN + '==> ')
+
+        if domain.isdigit():
+            print(Fore.RED + 'Please enter a domain: dirkk.tech')
+            exit(0)
+
         self.load = load
-        self.site = site
+        self.site = domain
+        Waybacknews.checkDomain(self)
 
-    def checkDomain():
+    def checkDomain(self):
         """check Availability of enter site"""
-        print(Fore.WHITE + 'Saisissez l\'url:')
-        url = input(Fore.CYAN + '==> ')
 
-        if url.isdigit():
-            print(Fore.RED + 'svp veuillez saisir une url: https://www.dirkk.tech')
-
-        arUrl = "https://archive.org/wayback/available?url=" + url
+        #get last archive site
+        arUrl = "https://archive.org/wayback/available?url=" + self.site
         resp = requests.get(arUrl)
 
         if resp.status_code in range(400, 600):
             print(Fore.RED + 'Some problems')
+            exit(-1)
+
+        archive = resp.json()
+        date = archive['archived_snapshots']['closest']['timestamp']
+        datetime = date[:4] + '/' +date[4:-8] + '/' + date[6:-6]
+        hours = date[8:-4] + ':' + date[10:-2] + ':' + date[12:]
 
         print(("{} {} {}").format(Fore.WHITE + '[-- Status Code --]: ', Fore.GREEN, resp.status_code))
-
         sleep(0.5)
-        archive = resp.json()
-        #print(archive)
         print(("{} {} {}").format(Fore.WHITE + '[-- Available Last Version --]: ', Fore.GREEN, archive['archived_snapshots']['closest']['available']))
         sleep(0.5)
         print(("{} {} {}").format(Fore.WHITE + '[-- Code Status last Version --]: ', Fore.GREEN, archive['archived_snapshots']['closest']['status']))
         sleep(0.5)
-        date = archive['archived_snapshots']['closest']['timestamp']
-        datetime = date[:4] + '/' +date[4:-8] + '/' + date[6:-6]
         print(("{} {} {}").format(Fore.WHITE + '[-- Date Last Version --]: ', Fore.GREEN, datetime))
         sleep(0.5)
-        hours = date[8:-4] + ':' + date[10:-2] + ':' + date[12:]
         print(("{} {} {}").format(Fore.WHITE + '[-- Hours Last Version --]: ', Fore.GREEN, hours))
 
         sleep(1)
-        print(("{}").format(Fore.YELLOW + 'Souhaitez-vous avoir les anciens version de ce site ?',))
+        print(("{}").format(Fore.YELLOW + 'Would you like to have older versions of this site ? yes or no',))
         query = input(Fore.CYAN + '==> ')
 
-        if query == 'yes':
+        if query == 'yes' or query == 'y' query == '':
             Waybacknews.showOlder(url)
         else:
             exit(0)
@@ -91,8 +95,8 @@ class Waybacknews:
 
         #print(precision)
         sleep(3)
-        print(("{}").format(Fore.YELLOW + 'Quel Contenu recherchez vous dans ces versions ?',))
-        content = input(Fore.CYAN + '==> ')
+        #print(("{}").format(Fore.YELLOW + 'Quel Contenu recherchez vous dans ces versions ?',))
+        #content = input(Fore.CYAN + '==> ')
         print(("{}").format(Fore.YELLOW + 'A la quelle des dates ?',))
         chxdate = int(input(Fore.CYAN + '==> '))
         sleep(0.3)
@@ -108,4 +112,4 @@ class Waybacknews:
             sleep(1)
 
 if __name__ == '__main__':
-    Waybacknews.checkDomain()
+    Waybacknews()
