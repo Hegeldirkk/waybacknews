@@ -1,13 +1,16 @@
 #!/usr/bin/python3
 """
 project: WayBackNews
-SE: Ikary Ryann
+SE & Hacker: Ikary Ryann
 website: https://www.dirkk.tech
 """
+
 
 import requests
 from colorama import Fore, Back, Style
 from time import sleep
+from bs4 import BeautifulSoup
+
 
 class Waybacknews:
     """represent News back"""
@@ -61,6 +64,7 @@ class Waybacknews:
 
     def showOlder(site):
         """display another older version in this site"""
+        precision = []
         print(("{}").format(Fore.YELLOW + 'Combien de contenu souhaitez vous avoir ?',))
         nb = input(Fore.CYAN + '==> ')
         cdxSite = "http://web.archive.org/cdx/search/cdx?url=" + site + "&output=json&limit=" + nb
@@ -79,15 +83,29 @@ class Waybacknews:
             length = sublist[6]
 
             #date time
+            precision.append(timestamp)
             datetime = timestamp[:4] + '-' +timestamp[4:-8] + '-' + timestamp[6:-6]
             hours = timestamp[8:-4] + ':' + timestamp[10:-2] + ':' + timestamp[12:]
             print(Fore.WHITE + '[==============> Date: ' + Fore.MAGENTA + datetime + '  ' + hours)
             sleep(2)
 
+        #print(precision)
         sleep(3)
         print(("{}").format(Fore.YELLOW + 'Quel Contenu recherchez vous dans ces versions ?',))
         content = input(Fore.CYAN + '==> ')
+        print(("{}").format(Fore.YELLOW + 'A la quelle des dates ?',))
+        chxdate = int(input(Fore.CYAN + '==> '))
+        sleep(0.3)
+        print(("{}").format(Fore.YELLOW + 'Waiting......',))
+        resp = requests.get("http://web.archive.org/web/" + precision[int(chxdate) + 1]  + "/http://www." + site)
+        soup = BeautifulSoup(resp.text, 'html.parser')
+        contentpage = soup.find_all('p')
+        paragraph_length = len(contentpage)
+        print(("{}").format(Fore.MAGENTA + str(paragraph_length) + Fore.WHITE + ' paragraphes trouvé sur cette page',))
 
-        print(("{}").format(Back.Red + 'Fonctionnalité bientot disponible. merci bye 😃!',))
+        for paragraph in range(0, paragraph_length):
+            print(contentpage[paragraph])
+            sleep(1)
+
 if __name__ == '__main__':
     Waybacknews.checkDomain()
