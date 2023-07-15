@@ -97,7 +97,7 @@ class Waybacknews:
             precision.append(timestamp)
             datetime = timestamp[:4] + '-' +timestamp[4:-8] + '-' + timestamp[6:-6]
             hours = timestamp[8:-4] + ':' + timestamp[10:-2] + ':' + timestamp[12:]
-            print(Fore.WHITE + '[==============> Nº ' + str(idtest) + '  Date: ' + Fore.MAGENTA + datetime + '  ' + hours)
+            print(Fore.WHITE + '[==============> Nº ' + str(idtest - 1) + '  Date: ' + Fore.MAGENTA + datetime + '  ' + hours)
             sleep(2)
 
         #print(precision)
@@ -108,7 +108,7 @@ class Waybacknews:
         while paragraph_length == 0:
             sleep(0.3)
             print(("{}").format(Fore.YELLOW + 'Waiting......',))
-            resp = requests.get("http://web.archive.org/web/" + precision[int(chxdate) + 1]  + "/http://www." + site)
+            resp = requests.get("http://web.archive.org/web/" + precision[int(chxdate)]  + "/http://www." + site)
             soup = BeautifulSoup(resp.text, 'html.parser')
             contentpage = soup.find_all('p')
             paragraph_length = len(contentpage)
@@ -122,7 +122,7 @@ class Waybacknews:
                     chxdate = int(input(Fore.CYAN + '==> (2)'))
 
         for paragraph in range(0, paragraph_length):
-            print(contentpage[paragraph])
+            print(contentpage[paragraph].text.strip())
             sleep(1)
 
     async def findContent(self, content):
