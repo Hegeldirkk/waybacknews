@@ -7,25 +7,18 @@ website: https://www.dirkk.tech
 
 
 import os
+import requests
 
 
-#class CustomOpener:
-#    def __init__(self, file_dir):
-#        self.file_dir = file_dir
-
-#def opener(path, flags, file_dir):
-#    return os.open(path, flags, dir_fd=file_dir)
-
-def download(text, title):
+def download(site, title):
     """download html page"""
 
+    res = requests.get("http://web.archive.org/web/" + title  + "/http://www." + site)
+    text = res.text
     if len(text) == 0:
         print("Contenu vide")
         exit(0)
 
-    #file_dir = os.open('htmlfile', os.O_RDONLY)
-    #path = 'htmlfile'
-    #opener = os.open(path, os.O_RDONLY, dir_fd=file_dir)
     name = "download" + title + ".html"
     with open("htmlfile/"+name, "w", encoding="utf-8") as f:
         f.write('{}'.format(text))
