@@ -13,6 +13,7 @@ from bs4 import BeautifulSoup
 import asyncio
 gettimestamp = __import__('gettimetamps').gettimestamp
 download = __import__('download').download
+toolname = __import__('tool_name').tool_name
 
 
 class Waybacknews:
@@ -23,6 +24,8 @@ class Waybacknews:
         Args:
             load (int): counter for loading
         """
+        toolname()
+        print("", end="\n")
         print(Fore.WHITE + 'Enter the target domain (like this' + Fore.RED +' "dirkk.tech"' + Fore.WHITE + ') : ')
         domain = input(Fore.CYAN + '==> ')
 
@@ -134,15 +137,38 @@ class Waybacknews:
         resdownload = str(input(Fore.CYAN + '==> '))
 
         if resdownload == "yes":
-            download(resp.text, precision[int(chxdate)])
+            download(self.site, precision[int(chxdate)])
 
     async def findContent(self, content):
         """function to find content"""
         #print(self.site)
+        page = []
         cdxSite = "http://web.archive.org/cdx/search/cdx?url=" + self.site + "&output=json"
         getAll = requests.get(cdxSite)
         contentTimestamps = gettimestamp(getAll.json())
-        print(contentTimestamps)
+
+        for version in contentTimestamps:
+            if version != "timestamps":
+                res = requests.get("http://web.archive.org/web/" + version  + "/http://www." + self.site)
+                soup = BeautifulSoup(res.text, 'html.parser')
+                html_doc = res.content
+                
+                if str(content) in html_doc.decode('utf-8'):
+                    page.append(version)
+                    print("[=====> Total found:" + str(len(page)))
+        
+        print(Fore.WHITE + '[------ Content found in ' + Fore.MAGENTA + str(len(page)) + Fore.WHITE + ' old page  --------]')
+        print(("{}").format(Fore.YELLOW + 'would you like download this page ? yes or no',))
+        resCttDownload = str(input(Fore.CYAN + '==> '))
+
+        i = 0
+        if resCttDownload == "yes":
+            for i in range(0, len(page)):
+                download(self.site, page[i])
 
 if __name__ == '__main__':
-    Waybacknews()
+    try:
+        Waybacknews()
+    except (KeyboardInterrupt):
+        print("", end="\n")
+        print(Fore.YELLOW + "Good bye! visit https://www.dirkk.tech")
