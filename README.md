@@ -1,5 +1,6 @@
 # waybacknews
-Obtaining the publication date of an online newspaper from a sentence. and have all the information of the old version of this site
+Obtaining the publication date of an online site from a sentence. and have all the information of the old version of this site
+This tool offers cybersecurity actors such as ethical hackers, investigators or cybersecurity enthusiasts the possibility of performing footprinting or reconnaissance on target sites. The main objective is to collect information that is no longer available in a recent version of a site, thus providing valuable data to assess the security of a system or application.
 
 ## Features
 	- get all available older versions of the target site
@@ -41,3 +42,5 @@ or
 ```
 ./waybacknews.py
 ```
+
+
