@@ -8,6 +8,7 @@ website: https://www.dirkk.tech
 
 import os
 import requests
+from colorama import Fore
 
 
 def download(site, title):
@@ -19,7 +20,10 @@ def download(site, title):
         print("Contenu vide")
         exit(0)
 
+    datetime = title[:4] + '-' +title[4:-8] + '-' + title[6:-6]
+    hours = title[8:-4] + ':' + title[10:-2] + ':' + title[12:]
+
     name = "download" + title + ".html"
     with open("htmlfile/"+name, "w", encoding="utf-8") as f:
         f.write('{}'.format(text))
-        print("fichier enregistrer dans le repertoire htmlfile",)
+        print("Version du : " + Fore.Magenta + datetime + " " + hours + Fore.WHITE + "enregistrer dans le repertoire htmlfile: " + name)

@@ -149,10 +149,11 @@ class Waybacknews:
                 res = requests.get("http://web.archive.org/web/" + version  + "/http://www." + self.site)
                 soup = BeautifulSoup(res.text, 'html.parser')
                 html_doc = res.content
+                
                 if str(content) in html_doc.decode('utf-8'):
                     page.append(version)
                     print("[=====> Total found:" + str(len(page)))
-                    #print(soup.get_text())
+        
         print(Fore.WHITE + '[------ Content found in ' + Fore.MAGENTA + str(len(page)) + Fore.WHITE + ' old page  --------]')
         print(("{}").format(Fore.YELLOW + 'would you like download this page ? yes or no',))
         resCttDownload = str(input(Fore.CYAN + '==> '))
@@ -163,4 +164,8 @@ class Waybacknews:
                 download(self.site, page[i])
 
 if __name__ == '__main__':
-    Waybacknews()
+    try:
+        Waybacknews()
+    except (KeyboardInterrupt):
+        print("", end="\n")
+        print(Fore.YELLOW + "Good bye! visit https://www.dirkk.tech")
