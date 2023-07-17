@@ -13,6 +13,7 @@ from bs4 import BeautifulSoup
 import asyncio
 gettimestamp = __import__('gettimetamps').gettimestamp
 download = __import__('download').download
+toolname = __import__('tool_name').tool_name
 
 
 class Waybacknews:
@@ -23,6 +24,8 @@ class Waybacknews:
         Args:
             load (int): counter for loading
         """
+        toolname()
+        print("", end="\n")
         print(Fore.WHITE + 'Enter the target domain (like this' + Fore.RED +' "dirkk.tech"' + Fore.WHITE + ') : ')
         domain = input(Fore.CYAN + '==> ')
 
