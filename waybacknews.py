@@ -12,6 +12,7 @@ from time import sleep
 from bs4 import BeautifulSoup
 import asyncio
 gettimestamp = __import__('gettimetamps').gettimestamp
+download = __import__('download').download
 
 
 class Waybacknews:
@@ -111,8 +112,9 @@ class Waybacknews:
             resp = requests.get("http://web.archive.org/web/" + precision[int(chxdate)]  + "/http://www." + site)
             soup = BeautifulSoup(resp.text, 'html.parser')
             contentpage = soup.find_all('p')
+            link = soup.find_all('a')
             paragraph_length = len(contentpage)
-            print(("{}").format(Fore.MAGENTA + str(paragraph_length) + Fore.WHITE + ' paragraphes trouvé sur cette page',))
+            print(("{}").format(Fore.MAGENTA + str(paragraph_length) + Fore.WHITE + ' paragraphs found on this page !',))
             if paragraph_length == 0:
                 print(("{}").format(Fore.YELLOW + 'would you like to choose another date ? yes or no',))
                 response = str(input(Fore.CYAN + '==> '))
@@ -124,6 +126,15 @@ class Waybacknews:
         for paragraph in range(0, paragraph_length):
             print(contentpage[paragraph].text.strip())
             sleep(1)
+        print(("{}").format(Fore.MAGENTA + str(len(link)) + Fore.WHITE + ' all link in this page',))
+        sleep(0.5)
+        print(link)
+        sleep(1)
+        print(("{}").format(Fore.YELLOW + 'would you like download this page ? yes or no',))
+        resdownload = str(input(Fore.CYAN + '==> '))
+
+        if resdownload == "yes":
+            download(resp.text, precision[int(chxdate)])
 
     async def findContent(self, content):
         """function to find content"""
