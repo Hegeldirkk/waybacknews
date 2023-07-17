@@ -5,6 +5,9 @@ Obtaining the publication date of an online newspaper from a sentence. and have 
 	- get all available older versions of the target site
 	- display the content of the chosen version
 	- find the appropriate page from a sentence
+	- obtain the availability of older versions of the target site
+	- download the old version you want
+	- automatically searches for content searched in all existing versions
 
 ## Usage
 
